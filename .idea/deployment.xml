@@ -5,7 +5,7 @@
       <paths name="client-log">
         <serverdata>
           <mappings>
-            <mapping deploy="~/client-log" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
