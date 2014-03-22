@@ -6,6 +6,8 @@
     "dependencies":{
         "express":"3.x",
         "q":"1.0.x",
-        "winston":"x"
+        "winston":"x",
+        "halson":"2.0.x",
+        "winston-logstash":"0.1.x"
     }
 }

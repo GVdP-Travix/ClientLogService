@@ -1,5 +1,8 @@
 "use strict";
 
+require('winston-logstash');
+
+
 var winston=require('winston'),
     logger=new(winston.Logger)({
         transports: [
@@ -7,6 +10,14 @@ var winston=require('winston'),
         ]
     });
 
+logger.reconfigure=function(host, port) {
+    winston.add(winston.transports.Logstash, {
+        port: port,
+        host: host
+    });
+};
+
+// TODO: Uncomment when done..
 //winston.handleExceptions();
 logger.info('Logging initialized');
 
