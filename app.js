@@ -1,6 +1,7 @@
-var http=require('http');
+var express=require('express'),
+    app=express();
 
-http.createServer(function (req, res) {
+http.createServer(function(req, res) {
     res.writeHead(200, {
         'Content-Type':'application/json'
     });
