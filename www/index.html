@@ -2,8 +2,69 @@
 <html>
 <head>
     <title>Sample test page</title>
+    <script src="//cdn.jsdelivr.net/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/tracekit.js"></script>
+    <script>
+        function sendError(error) {
+            'use strict';
+            try {
+                if(!error.stack) {
+                    error.stack=(new Error('force-added stack')).stack;
+                    if(error.stack) {
+                        error.stack=error.stack.toString();
+                    }
+                }
+            } catch(e) {
+            }
+
+            $.ajax({
+                url:'http://travix-client-log.cloudapp.net/api/log',
+                type:'POST',
+                data:error
+            }).
+                    fail(function() {
+                        console.warn('Failed to send log...');
+                    }).
+                    done(function(resp) {
+                        console.warn('sendError END '+resp);
+//                        if(resp.status==='error') {
+//                            jserrorPostFail.apply(this, arguments);
+//                        }
+                    });
+        }
+
+        TraceKit.report.subscribe(sendError);
+    </script>
+    <script>
+        $(function() {
+            var errors=[
+            ];
+            $('#makeErrors').click(function(e) {
+                var errorText=$('#err-text').value(), err;
+                e.preventDefault();
+                errorText=errorText.trim()?errorText.trim():errors[Math.floor(Math.random()*errors.length)];
+                if(Math.random()>0.5) {
+                    throw {
+                        name:"Custom System Error",
+                        message:errorText,
+                        toString:function() {
+                            return this.name+": "+this.message;
+                        }
+                    };
+                } else {
+                    err=1/0;
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-
+<fieldset>
+    <legend>Error generator.</legend>
+    <ul>
+        <li><label>Any extra information you want to send: <input type="text" id="err-text"/></label></li>
+    </ul>
+    <button id="makeErrors">Click here to send errors to the logger!</button>
+</fieldset>
 </body>
 </html>

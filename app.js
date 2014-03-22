@@ -4,8 +4,8 @@ var log=require('./winston/logger'),
     fs=require('fs'),
     http=require('http'),
     Q=require('q'),
-    halson=require('halson'),
     express=require('express'),
+    routes=require('./routes/routes'),
     app=express(),
     readFile,
     config,
@@ -44,57 +44,26 @@ function setupRoutes() {
     app.enable('trust proxy');
 
     // Usage
-    app.get('/', function(req, res) {
-        "use strict";
-        var usage=halson({
-            name:"client-log"
-        }).
-            addLink('self', "/").
-            addLink('ping', "/ping").
-            addLink('check', "/check").
-            addLink('log', "/log");
-        res.json(usage);
-    });
+    app.get('/', routes.index);
     deferred.notify(0.1);
 
     // Health check
-    app.get('/ping', function(req, res) {
-        "use strict";
-        var ping=halson({
-            ping:"pong"
-        }).addLink('self', '/');
-        res.json(ping);
-    });
+    app.get('/ping', routes.ping);
     deferred.notify(2.5);
 
-    app.get('/check', function(req, res) {
-        "use strict";
-        var check=halson({
-            status:"alive",
-            api:{
-                listeningOn:port,
-                loggingOn:{
-                    console: {},
-                    logstash: {
-                        host: logstash.host,
-                        port: logstash.port
-                    }
-                }
-            }
-        }).addLink('self', '/');
-        res.json(check);
-    });
+    app.get('/check', routes.check);
     deferred.notify(5.0);
 
     // Log data
+// Dunno if I want to expose this
 //    app.get('/log', function(req, res) {
 //        // Empty HTTP 200
 //        res.end();
 //    });
 //    deferred.notify(7.5);
 
-    app.post('/log', function(req, res) {
-    });
+    // Posting to this requires some parsing..
+    app.post('/log', express.bodyParser(), routes.doLog(log));
     deferred.notify(1.0);
     deferred.resolve('DONE!');
 
