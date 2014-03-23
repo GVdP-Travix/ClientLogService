@@ -44,6 +44,6 @@ exports.doLog=function(logger) {
         var content=req.body;
 
         res.end();
-        logger.log('error', "Frontend error", { tags:["javascript", "frontend"], body:content});
+        logger.log('error', { tags:["javascript", "frontend"], body:content});
     };
 };

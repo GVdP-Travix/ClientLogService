@@ -33,7 +33,6 @@ function readConfig() {
             logstash=config["logstash"];
             log.info(config);
 
-            // TODO later..
             log.reconfigure(logstash.host, logstash.port)
         }, function(err) {
             log.error("Can't read config.json!", err);
