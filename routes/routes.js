@@ -43,7 +43,7 @@ exports.doLog=function(logger) {
     return function(req, res) {
         var content=req.body;
 
-        res.end();
+        res.json({});
         logger.log('error', { tags:["javascript", "frontend"], body:content});
     };
 };
