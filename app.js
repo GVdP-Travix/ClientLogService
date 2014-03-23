@@ -31,8 +31,10 @@ function readConfig() {
             var config=JSON.parse(data);
             port=config["port"];
             logstash=config["logstash"];
+            log.info(config);
+
             // TODO later..
-            //log.reconfigure(logstash.host, logstash.port)
+            log.reconfigure(logstash.host, logstash.port)
         }, function(err) {
             log.error("Can't read config.json!", err);
             return process.exit(11);

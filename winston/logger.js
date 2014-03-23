@@ -4,25 +4,17 @@ require('winston-logstash');
 
 
 var winston=require('winston'),
-    logger=new winston.Logger;
-
-winston.loggers.options.transports=[
-    new (winston.transports.Console)()
-];
-//=new(winston.Logger)({
-//        transports: [
-//            new (winston.transports.Console)()
-//        ]
-//    });
+    logger=new winston.Logger({
+        transports:[
+            new (winston.transports.Console)()
+        ]
+    });
 
 logger.reconfigure=function(host, port) {
-    winston.loggers.add('??', {
-        transports:[
-            winston.transports.Logstash, {
-                port:port,
-                host:host
-            }
-        ]});
+    logger.add(winston.transports.Logstash, {
+        port:port,
+        host:host
+    }, false);
 };
 
 // TODO: Uncomment when done..
